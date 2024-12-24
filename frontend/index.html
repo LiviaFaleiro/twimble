@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Purple Twitter</title>
+    <title>twinble</title>
     <style>
         :root {
             --dark-purple: #2D1B36;
@@ -116,14 +116,6 @@
             background: linear-gradient(45deg, rgba(138, 43, 226, 0.2), rgba(157, 78, 221, 0.2));
             color: white;
             transform: translateX(5px);
-        }
-
-    
-
-        .post-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
         }
 
         .user-avatar {
@@ -246,16 +238,130 @@
         }
         
         .post-box {
-            padding: 30px; 
-            margin-bottom: 35px; 
+            padding: 30px;
+            margin-bottom: 35px;
+            background: linear-gradient(145deg, rgba(200, 162, 200, 0.2), rgba(157, 78, 221, 0.15));
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .post-box:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-purple);
+            box-shadow: 0 10px 30px rgba(157, 78, 221, 0.2);
+        }
+        
+        .post-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(157, 78, 221, 0.1),
+                transparent
+            );
+            transition: 0.5s;
+        }
+        
+        .post-box:hover::before {
+            left: 100%;
+            animation: shine 1.5s infinite;
+        }
+        
+        @keyframes shine {
+            from {
+                left: -100%;
+            }
+            to {
+                left: 100%;
+            }
         }
         
         .post-box textarea {
             font-size: 18px;
-            min-height: 120px; 
+            min-height: 120px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            transition: all 0.3s ease;
         }
         
-     
+        .post-box textarea:focus {
+            transform: scale(1.01);
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 20px rgba(157, 78, 221, 0.2);
+        }
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            position: relative;
+            justify-content: space-between;
+        }
+        
+        .post-header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .post-menu {
+            position: relative;
+            margin-left: auto;
+        }
+        
+        .post-menu-dots {
+            cursor: pointer;
+            font-size: 24px;
+            color: var(--lilac);
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+        }
+        .post-menu-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 30px;
+            background: linear-gradient(145deg, rgba(45, 27, 54, 0.98), rgba(26, 15, 32, 0.98));
+            border-radius: 12px;
+            padding: 8px 0;
+            min-width: 120px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 10;
+            animation: menuSlideDown 0.2s ease;
+        }
+        
+        .post-menu-content.active {
+            display: block;
+        }
+        
+        @keyframes menuSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
     </style>
 </head>
 <body>
@@ -400,22 +506,34 @@
         function createPost() {
             const postText = document.getElementById('postText').value;
             if (postText.trim() === '') return;
-
+        
             const post = document.createElement('div');
             post.className = 'post';
             
             const userInitial = currentUser.name.charAt(0).toUpperCase();
             const currentTime = new Date().toLocaleTimeString();
+            const authorEmail = currentUser.email; 
             
             post.innerHTML = `
-                <div class="post-header">
-                    <div class="user-avatar">${userInitial}</div>
-                    <div>
-                        <div class="user-name">${currentUser.name}</div>
-                        <span class="post-time">${currentTime}</span>
+                <div class="post-header" data-author="${authorEmail}">
+                    <div class="post-header-left">
+                        <div class="user-avatar">${userInitial}</div>
+                        <div>
+                            <div class="user-name">${currentUser.name}</div>
+                            <span class="post-time">${currentTime}</span>
+                        </div>
                     </div>
+                    ${currentUser.email === authorEmail ? `
+                        <div class="post-menu">
+                            <div class="post-menu-dots" onclick="togglePostMenu(this)">⋮</div>
+                            <div class="post-menu-content">
+                                <div class="post-menu-item" onclick="editPost(this)">Edit</div>
+                                <div class="post-menu-item" onclick="deletePost(this)">Delete</div>
+                            </div>
+                        </div>
+                    ` : ''}
                 </div>
-                <p>${postText}</p>
+                <p class="post-content">${postText}</p>
                 <div class="post-actions">
                     <button class="action-button" onclick="likePost(this)">
                         ♥ <span class="action-count">0</span>
@@ -428,10 +546,62 @@
                     </button>
                 </div>
             `;
-
+        
             document.getElementById('posts').prepend(post);
             document.getElementById('postText').value = '';
         }
+        
+        
+        function togglePostMenu(element) {
+            const allMenus = document.querySelectorAll('.post-menu-content');
+            allMenus.forEach(menu => {
+                if (menu !== element.nextElementSibling) {
+                    menu.classList.remove('active');
+                }
+            });
+            const menu = element.nextElementSibling;
+            menu.classList.toggle('active');
+
+            document.addEventListener('click', function closeMenu(e) {
+                if (!element.contains(e.target) && !menu.contains(e.target)) {
+                    menu.classList.remove('active');
+                    document.removeEventListener('click', closeMenu);
+                }
+            });
+        }
+        
+        function editPost(element) {
+            const post = element.closest('.post');
+            const contentElement = post.querySelector('.post-content');
+            const currentContent = contentElement.textContent;
+            
+            const textarea = document.createElement('textarea');
+            textarea.value = currentContent;
+            textarea.style.width = '100%';
+            textarea.style.minHeight = '100px';
+            
+            contentElement.replaceWith(textarea);
+            
+            textarea.focus();
+            
+            textarea.addEventListener('blur', () => {
+                const newContent = textarea.value;
+                const p = document.createElement('p');
+                p.className = 'post-content';
+                p.textContent = newContent;
+                textarea.replaceWith(p);
+            });
+            
+            togglePostMenu(element.parentElement.previousElementSibling);
+        }
+        
+        function deletePost(element) {
+            const post = element.closest('.post');
+            post.style.animation = 'fadeOut 0.3s ease';
+            setTimeout(() => post.remove(), 300);
+            togglePostMenu(element.parentElement.previousElementSibling);
+        }
+        
 
         function likePost(button) {
             const countSpan = button.querySelector('.action-count');
