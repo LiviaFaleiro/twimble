@@ -1,0 +1,171 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Login e Cadastro */
+.auth-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #6A0DAD; /* Roxo escuro */
+    color: white;
+}
+
+.auth-container h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.auth-container form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+}
+
+.auth-container form input {
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+}
+
+.auth-container form button {
+    background-color: #D8BFD8; /* Roxo claro */
+    color: #6A0DAD; /* Roxo escuro */
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.auth-container form button:hover {
+    background-color: #CDA6CC; /* Variante de roxo claro */
+}
+
+.auth-container button.switch {
+    background: none;
+    border: none;
+    color: white;
+    margin-top: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* Feed */
+.container {
+    display: none;
+    flex-direction: row;
+    height: 100vh;
+}
+
+.sidebar {
+    background-color: #6A0DAD; /* Roxo escuro */
+    color: white;
+    padding: 20px;
+    width: 20%;
+    min-width: 200px;
+}
+
+.sidebar h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.feed {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: #E6E6FA; /* Roxo claro */
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+header h2 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.new-post {
+    background-color: white;
+    border: 1px solid #CDA6CC;
+    border-radius: 10px;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+}
+
+.new-post textarea {
+    width: 100%;
+    border: none;
+    resize: none;
+    font-size: 16px;
+    outline: none;
+}
+
+.new-post button {
+    background-color: #6A0DAD;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.tweet {
+    background-color: white;
+    border: 1px solid #CDA6CC;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.tweet .user {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.tweet .content {
+    margin-bottom: 10px;
+}
+
+.tweet .actions {
+    display: flex;
+    justify-content: space-around;
+    font-size: 14px;
+}
+
+.tweet .actions button {
+    background: none;
+    border: none;
+    color: #6A0DAD;
+    cursor: pointer;
+}
+
+.tweet .actions button:hover {
+    text-decoration: underline;
+} 

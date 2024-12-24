@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purple Twitter</title>
+    <style>
+        :root {
+            --dark-purple: #2D1B36;
+            --lilac: #C8A2C8;
+            --light-lilac: #E6D7E6;
+            --vivid-purple: #8A2BE2;
+            --neon-purple: #9D4EDD;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark-purple) 0%, #1a0f20 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .login-container, .register-container {
+            display: none;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background: linear-gradient(145deg, rgba(200, 162, 200, 0.2), rgba(200, 162, 200, 0.1));
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: white;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .main-container {
+            display: none;
+            grid-template-columns: 300px 1fr;
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(45, 27, 54, 0.9) 0%, rgba(26, 15, 32, 0.9) 100%);
+        }
+
+        .side-menu {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: linear-gradient(180deg, var(--dark-purple) 0%, rgba(45, 27, 54, 0.9) 100%);
+            padding: 25px;
+            border-right: 1px solid rgba(200, 162, 200, 0.2);
+            height: 100vh;
+        }
+
+
+
+        button {
+            background: linear-gradient(45deg, var(--vivid-purple), var(--neon-purple));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(138, 43, 226, 0.4);
+            background: linear-gradient(45deg, var(--neon-purple), var(--vivid-purple));
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 12px;
+            border: 1px solid rgba(200, 162, 200, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 10px rgba(157, 78, 221, 0.3);
+        }
+
+        .menu-item {
+            padding: 12px 20px;
+            margin: 8px 0;
+            cursor: pointer;
+            color: var(--lilac);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .menu-item:hover {
+            background: linear-gradient(45deg, rgba(138, 43, 226, 0.2), rgba(157, 78, 221, 0.2));
+            color: white;
+            transform: translateX(5px);
+        }
+
+    
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--vivid-purple), var(--neon-purple));
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 25px;
+            margin-top: 15px;
+        }
+
+        .action-button {
+            background: none;
+            box-shadow: none;
+            color: var(--lilac);
+            padding: 8px 15px;
+            font-size: 16px;
+            text-transform: none;
+        }
+
+        .action-button:hover {
+            background: linear-gradient(45deg, rgba(138, 43, 226, 0.2), rgba(157, 78, 221, 0.2));
+            transform: scale(1.05);
+            box-shadow: none;
+        }
+
+        .action-count {
+            font-size: 14px;
+            color: var(--lilac);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--lilac), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 28px;
+        }
+
+        .user-section {
+            margin-top: auto;
+            padding: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: linear-gradient(145deg, rgba(200, 162, 200, 0.15), rgba(200, 162, 200, 0.1));
+            border-radius: 12px;
+            gap: 10px;
+        }
+
+        .user-details {
+            flex-grow: 1;
+        }
+
+        .user-name {
+            font-weight: bold;
+            color: var(--lilac);
+            font-size: 16px;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .logout-btn {
+            background: none;
+            padding: 8px;
+            border-radius: 50%;
+            min-width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-btn:hover {
+            background: rgba(157, 78, 221, 0.2);
+        }
+
+        .logout-icon {
+            font-size: 20px;
+        }
+
+        .main-content {
+            padding: 20px;
+            max-width: 1000px; 
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .post {
+            background: linear-gradient(145deg, rgba(200, 162, 200, 0.15), rgba(200, 162, 200, 0.1));
+            padding: 30px; 
+            border-radius: 15px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px; 
+        }
+        
+        .post p {
+            margin: 15px 0;
+            line-height: 1.5;
+            font-size: 18px; 
+        }
+        
+        .post-box {
+            padding: 30px; 
+            margin-bottom: 35px; 
+        }
+        
+        .post-box textarea {
+            font-size: 18px;
+            min-height: 120px; 
+        }
+        
+     
+    </style>
+</head>
+<body>
+    <div class="login-container" id="loginSection">
+        <h2>Login</h2>
+        <input type="email" placeholder="Email" id="loginEmail">
+        <input type="password" placeholder="Password" id="loginPassword">
+        <button onclick="login()">Login</button>
+        <button onclick="showRegister()">Create Account</button>
+    </div>
+
+    <div class="register-container" id="registerSection">
+        <h2>Create Account</h2>
+        <input type="text" placeholder="Name" id="registerName">
+        <input type="email" placeholder="Email" id="registerEmail">
+        <input type="password" placeholder="Password" id="registerPassword">
+        <button onclick="register()">Register</button>
+        <button onclick="showLogin()">Back to Login</button>
+    </div>
+
+    <div class="main-container" id="mainSection">
+        <div class="side-menu">
+            <div class="menu-items">
+                <div class="menu-item">Home</div>
+                <div class="menu-item">Profile</div>
+                <div class="menu-item">Messages</div>
+                <div class="menu-item">Notifications</div>
+            </div>
+            <div id="userSection" class="user-section">
+               
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="post-box">
+                <textarea placeholder="What's happening?" rows="4" id="postText"></textarea>
+                <button onclick="createPost()">Post</button>
+            </div>
+            <div id="posts">
+               
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = {
+            name: '',
+            email: ''
+        };
+
+        window.onload = function() {
+            const storedUser = localStorage.getItem('currentUser');
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+                updateUserSection();
+                showMain();
+            } else {
+                showLogin();
+            }
+        };
+
+        function updateUserSection() {
+            const userSection = document.getElementById('userSection');
+            userSection.innerHTML = `
+                <div class="user-info">
+                    <div class="user-avatar">${currentUser.name.charAt(0).toUpperCase()}</div>
+                    <div class="user-details">
+                        <div class="user-name">${currentUser.name}</div>
+                        <div class="user-email">${currentUser.email}</div>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">
+                        <span class="logout-icon">↪</span>
+                    </button>
+                </div>
+            `;
+        }
+
+        function showLogin() {
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('registerSection').style.display = 'none';
+            document.getElementById('mainSection').style.display = 'none';
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+        }
+
+        function showRegister() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('registerSection').style.display = 'block';
+            document.getElementById('mainSection').style.display = 'none';
+            document.getElementById('registerName').value = '';
+            document.getElementById('registerEmail').value = '';
+            document.getElementById('registerPassword').value = '';
+        }
+
+        function showMain() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('registerSection').style.display = 'none';
+            document.getElementById('mainSection').style.display = 'grid';
+        }
+
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            currentUser.name = email.split('@')[0];
+            currentUser.email = email;
+
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            updateUserSection();
+            showMain();
+        }
+
+        function register() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            if (!name || !email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            currentUser.name = name;
+            currentUser.email = email;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            alert('Registration successful! Please login.');
+            showLogin();
+        }
+
+        function logout() {
+            currentUser = { name: '', email: '' };
+            localStorage.removeItem('currentUser');
+            document.getElementById('userSection').innerHTML = '';
+            showLogin();
+        }
+
+        function createPost() {
+            const postText = document.getElementById('postText').value;
+            if (postText.trim() === '') return;
+
+            const post = document.createElement('div');
+            post.className = 'post';
+            
+            const userInitial = currentUser.name.charAt(0).toUpperCase();
+            const currentTime = new Date().toLocaleTimeString();
+            
+            post.innerHTML = `
+                <div class="post-header">
+                    <div class="user-avatar">${userInitial}</div>
+                    <div>
+                        <div class="user-name">${currentUser.name}</div>
+                        <span class="post-time">${currentTime}</span>
+                    </div>
+                </div>
+                <p>${postText}</p>
+                <div class="post-actions">
+                    <button class="action-button" onclick="likePost(this)">
+                        ♥ <span class="action-count">0</span>
+                    </button>
+                    <button class="action-button" onclick="commentPost(this)">
+                        💬 <span class="action-count">0</span>
+                    </button>
+                    <button class="action-button" onclick="sharePost(this)">
+                        🔄 <span class="action-count">0</span>
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('posts').prepend(post);
+            document.getElementById('postText').value = '';
+        }
+
+        function likePost(button) {
+            const countSpan = button.querySelector('.action-count');
+            let count = parseInt(countSpan.textContent);
+            countSpan.textContent = count + 1;
+        }
+
+        function commentPost(button) {
+            const countSpan = button.querySelector('.action-count');
+            let count = parseInt(countSpan.textContent);
+            countSpan.textContent = count + 1;
+        }
+
+        function sharePost(button) {
+            const countSpan = button.querySelector('.action-count');
+            let count = parseInt(countSpan.textContent);
+            countSpan.textContent = count + 1;
+        }
+    </script>
+</body>
+</html>
