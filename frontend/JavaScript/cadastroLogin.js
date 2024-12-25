@@ -17,14 +17,14 @@ function fazerLogin() {
                 tipo: usuarioEncontrado.tipo || "usuario"
             };
 
-            alert(`Bem-vindo, ${usuarioAtual.usuario}`);
+            swal(`Bem Vindo(a), ${usuarioAtual.usuario}`, "Aproveite o melhor do Twimble", "success");
             $("#modal-login").hide();
             $("#modal-registro").hide();
             $("#main-screen").show();
             
             loadPosts(); // Carrega os posts iniciais
         } else {
-            alert("Usuário ou senha inválidos. Por favor, tente novamente.");
+            swal("Usuario ou senha inválidos!","Por favor tente novamente", "error");
         }
     });
 }
@@ -53,12 +53,12 @@ function fazerRegistro() {
     })
     .then(response => response.json())
     .then(data => {
-        alert('Cadastro realizado com sucesso!');
+        swal("Cadastro realizado com sucesso!","Vcoê será redirecionado para a página de login", "success");
         login(); // Redireciona para a tela de login
     })
     .catch(error => {
         console.error('Erro:', error);
-        alert('Erro ao realizar cadastro');
+        swal("Erro ao realizar cadastro", "error");
     });
 }
 
