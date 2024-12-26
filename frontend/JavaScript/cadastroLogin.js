@@ -22,7 +22,7 @@ function fazerLogin() {
             $("#modal-registro").hide();
             $("#main-screen").show();
             
-            loadPosts(); // Carrega os posts iniciais
+            carregarPosts(); // Carrega os posts iniciais
         } else {
             swal("Usuario ou senha inválidos!","Por favor tente novamente", "error");
         }
