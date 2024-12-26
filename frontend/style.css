@@ -126,6 +126,7 @@
     left: 0;
     width: 280px;
     overflow-y: auto;
+    z-index: 10; 
 }
 
 .main-screen {
@@ -136,11 +137,11 @@
     background: #f8f7ff;
     gap: 20px;
     padding: 20px 20px 20px 300px;
-    position: fixed;
-    top: 0;
-    left: 0;
+    position: relative;
     margin: 0;
-    overflow: hidden;
+    overflow-y: auto;
+
+   
 }
 .logo h1 {
     color: white;
@@ -176,9 +177,9 @@
 }
   
 .feed {
-    width: 600px;
-    margin: 0;
-    padding: 0;
+  width: 600px;
+  padding: 20px;
+  margin-left: 20px;
 }
   
   .post-box textarea:focus {
@@ -186,7 +187,7 @@
   }
 
   .post-box {
-    background: white;
+    background: rgb(255, 255, 255);
     border-radius: 16px;
     padding: 20px 20px;
     align-content: center;
@@ -218,13 +219,14 @@
     opacity: 0.9;
 }
 
- 
-  
   .post {
     background: white;
     border-radius: 24px;
-    padding: 20px;
+    padding: 32px; 
     box-shadow: 0 2px 8px var(--glass-bg);
+    margin-bottom: 24px; 
+    width: 200%; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   
   .post:hover {
