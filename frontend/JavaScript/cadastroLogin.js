@@ -16,7 +16,7 @@ function fazerLogin() {
                 senha: usuarioEncontrado.senha,
                 tipo: usuarioEncontrado.tipo || "usuario"
             };
-
+            localStorage.setItem('userId', usuarioEncontrado.id);
             swal(`Bem Vindo(a), ${usuarioAtual.usuario}`, "Aproveite o melhor do Twimble", "success");
             $("#modal-login").hide();
             $("#modal-registro").hide();

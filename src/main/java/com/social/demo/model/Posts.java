@@ -13,7 +13,16 @@ public class Posts {
     private int n_curtidas;
     private int id_usuario;
     private int n_comentarios;
+    private String nomeUsuario;
 
+
+    public String getNomeUsuario() {
+        return nomeUsuario;
+    }
+
+    public void setNomeUsuario(String nomeUsuario) {
+        this.nomeUsuario = nomeUsuario;
+    }
     public int getId() {
         return id;
     }
@@ -51,7 +60,8 @@ public class Posts {
 
         String sql = "INSERT INTO posts (texto, n_curtidas, id_usuario, n_comentarios) VALUES (?, ?, ?, ?)";
         try {
-            PreparedStatement  ps = dbConn.prepareStatement(sql);
+            PreparedStatement ps = dbConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
             ps.setString(1, this.texto);
             ps.setInt(2, this.n_curtidas);
             ps.setInt(3, this.id_usuario);
@@ -73,7 +83,7 @@ public class Posts {
         ArrayList<Posts> lista = new ArrayList<Posts>();
         Conexao c = new Conexao();
         Connection dbConn = c.getConexao();
-        String sql = "SELECT * FROM posts";
+        String sql = "SELECT p.*, u.nome as nome_usuario FROM posts p INNER JOIN usuario u ON p.id_usuario = u.id";
         try {
             Statement stmt = dbConn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
@@ -84,14 +94,16 @@ public class Posts {
                 post.setN_curtidas(rs.getInt("n_curtidas"));
                 post.setId_usuario(rs.getInt("id_usuario"));
                 post.setN_comentarios(rs.getInt("n_comentarios"));
+                post.setNomeUsuario(rs.getString("nome_usuario"));
                 lista.add(post);
             }
         } catch (SQLException e) {
             System.out.println("Erro ao listar posts: " + e.getMessage());
             e.printStackTrace();    
-        } return lista;
+        } 
+        return lista;
     }
-
+    
     public void load() {
         Conexao c = new Conexao();
         Connection dbConn = c.getConexao();

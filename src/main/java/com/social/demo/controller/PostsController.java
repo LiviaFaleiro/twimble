@@ -3,6 +3,8 @@ package com.social.demo.controller;
 import com.social.demo.model.Posts;
 
 import java.util.ArrayList;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,13 +19,18 @@ public class PostsController {
     
     private Posts posts;
 
-    @PostMapping("posts/criar")
-    public void criar(@RequestParam("texto") String texto, @RequestParam("id_usuario") int id_usuario){
+    @PostMapping("/posts/criar/{id_usuario}")
+    public ResponseEntity<Posts> criar( //erro na cors
+        @RequestParam("texto") String texto, 
+        @PathVariable("id_usuario") int id_usuario
+    ){
         posts = new Posts();
         posts.setTexto(texto);
         posts.setId_usuario(id_usuario);
         posts.salvar();
-}
+        return ResponseEntity.ok(posts);
+    }
+
     @GetMapping("posts/listar")
     public ArrayList<Posts> listar(){
         return Posts.getAll();
